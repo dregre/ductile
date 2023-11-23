@@ -52,7 +52,7 @@ def handle_fns(val, fn_and_args):
         except IndexError:
             kwargs = {}
 
-        return fn(*chain([val], args), kwargs)
+        return fn(*chain([val], args), **kwargs)
 
 def pipe(*args):
     val, *fns = args
