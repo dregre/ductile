@@ -1,5 +1,6 @@
 from typing import Any
 from itertools import chain
+from functools import reduce
 
 class Pipe:
     def __init__(self, val):
@@ -37,3 +38,22 @@ class PipeCallable(Pipe):
         self.args = args
         self.kwargs = kwargs
         return self
+    
+def handle_fns(val, fn_and_args):
+        fn = fn_and_args[0]
+
+        try:
+            args = fn_and_args[1]
+        except IndexError:
+            args = []
+
+        try:
+            kwargs = fn_and_args[2]
+        except IndexError:
+            kwargs = {}
+
+        return fn(*chain([val], args), kwargs)
+
+def pipe(*args):
+    val, *fns = args
+    return reduce(handle_fns, fns, val)
