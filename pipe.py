@@ -1,3 +1,4 @@
+import types
 from typing import Any
 from itertools import chain
 from functools import reduce
@@ -39,16 +40,34 @@ class PipeCallable(Pipe):
         self.kwargs = kwargs
         return self
     
-def F(fn, *args, **kwargs):
-    return ((1, fn, args, kwargs),)
+class Pipeable(tuple):
+    @classmethod
+    def of_value(cls, val):
+        return cls((val,))
 
-def B(fn, *args, **kwargs):
-    return ((-1, fn, args, kwargs),)
+    def __ror__(self, other):
+        if isinstance(other, Pipeable):
+            return Pipeable(other + self)
+        else:
+            return Pipeable((other,)) | self
+        
+    def __or__(self, other):
+        if isinstance(other, Pipeable):
+            return Pipeable(self + other)
+        else:
+            return self | Pipeable.of_value(other)
     
-def handle_fns(val, fn_and_args):
+def f(fn, *args, **kwargs):
+    return Pipeable.of_value((1, fn, args, kwargs))
+
+def b(fn, *args, **kwargs):
+    return Pipeable.of_value((-1, fn, args, kwargs))
+    
+def handle_fn_and_args(val, fn_and_args):
         order, fn, args, kwargs = fn_and_args
         newargs = chain([val], args) if order == 1 else chain(args, [val])
         return fn(*newargs, **kwargs)
 
-def pipe(val, fns):
-    return reduce(handle_fns, fns, val)
+def pipe(val_and_fns_and_args):
+    val, *fns_and_args = val_and_fns_and_args
+    return reduce(handle_fn_and_args, fns_and_args, val)
