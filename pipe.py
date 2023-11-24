@@ -33,13 +33,17 @@ class Pipeable:
         
 class Positions(int, Enum):
     FRONT = 1
-    BACK = -1
+    BACK = 2
+    PLACEHOLDER = 3
     
-def f(fn, *args, **kwargs):
+def F(fn, *args, **kwargs):
     return Pipeable.of_value((Positions.FRONT, fn, args, kwargs))
 
-def b(fn, *args, **kwargs):
+def B(fn, *args, **kwargs):
     return Pipeable.of_value((Positions.BACK, fn, args, kwargs))
+
+def P(fn, *args, **kwargs):
+    return Pipeable.of_value((Positions.PLACEHOLDER, fn, args, kwargs))
     
 def handle_fn_and_args(val, fn_and_args):
     match fn_and_args:
@@ -47,10 +51,13 @@ def handle_fn_and_args(val, fn_and_args):
             return fn(*chain([val], args), **kwargs)
         case (Positions.BACK, fn, args, kwargs):
             return fn(*chain(args, [val]), **kwargs)
+        case (Positions.PLACEHOLDER, fn, args, kwargs) if Positions.PLACEHOLDER in args:
+            return fn(*map(lambda x: val if x is Positions.PLACEHOLDER else x, args), **kwargs)
         case (_, _, _, _):
             raise NotImplementedError(
-                "Only piping to the front (prepend) or back (append)"
-                " of *args is currently supported.")
+                "Only piping to the front (prepend) or back (append) "
+                "or to a specific placeholder position of *args is "
+                "currently supported.")
         case _:
             raise ValueError("Incorrect instruction format.")
 
