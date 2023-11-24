@@ -47,13 +47,13 @@ class Pipeable(tuple):
 
     def __ror__(self, other):
         if isinstance(other, Pipeable):
-            return Pipeable(other + self)
+            return Pipeable(chain(other, self))
         else:
-            return Pipeable((other,)) | self
+            return Pipeable.of_value(other) | self
         
     def __or__(self, other):
         if isinstance(other, Pipeable):
-            return Pipeable(self + other)
+            return Pipeable(chain(self, other))
         else:
             return self | Pipeable.of_value(other)
     
