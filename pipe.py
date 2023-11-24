@@ -2,7 +2,10 @@ from itertools import chain
 from functools import reduce
 from enum import Enum
     
-class Pipeable(tuple):
+class Pipeable:
+    def __init__(self, sequence):
+        self.sequence = sequence
+
     @classmethod
     def of_value(cls, val):
         return cls((val,))
@@ -18,6 +21,12 @@ class Pipeable(tuple):
             return Pipeable(chain(self, other))
         else:
             return self | Pipeable.of_value(other)
+        
+    def __iter__(self):
+        return self.sequence.__iter__()
+    
+    def __next__(self):
+        return self.sequence.__next__()
         
 class Positions(int, Enum):
     FRONT = 1
