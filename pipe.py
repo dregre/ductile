@@ -35,6 +35,7 @@ class Positions(int, Enum):
     FRONT = 1
     BACK = 2
     PLACEHOLDER = 3
+    HERE = 3
     
 def F(fn, *args, **kwargs):
     return Pipeable.of_value((Positions.FRONT, fn, args, kwargs))
