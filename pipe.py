@@ -65,7 +65,15 @@ def b(fn, *args, **kwargs):
     
 def handle_fn_and_args(val, fn_and_args):
         order, fn, args, kwargs = fn_and_args
-        newargs = chain([val], args) if order == 1 else chain(args, [val])
+        match order:
+            case 1:
+                newargs = chain([val], args)
+            case -1:
+                newargs = chain(args, [val])
+            case _:
+                raise NotImplementedError(
+                    "Only piping to the front (push) or back (append)"
+                    " of *args is currently supported.")
         return fn(*newargs, **kwargs)
 
 def pipe(val_and_fns_and_args):
