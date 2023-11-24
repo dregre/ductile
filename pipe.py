@@ -35,10 +35,12 @@ def handle_fn_and_args(val, fn_and_args):
             return fn(*chain([val], args), **kwargs)
         case (Positions.BACK, fn, args, kwargs):
             return fn(*chain(args, [val]), **kwargs)
-        case _:
+        case (_, _, _, _):
             raise NotImplementedError(
                 "Only piping to the front (push) or back (append)"
                 " of *args is currently supported.")
+        case _:
+            raise ValueError("Incorrect instruction format.")
 
 def pipe(val_and_fns_and_args):
     val, *fns_and_args = val_and_fns_and_args
