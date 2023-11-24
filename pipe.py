@@ -27,6 +27,9 @@ class Pipeable:
     
     def __next__(self):
         return self.sequence.__next__()
+    
+    def __repr__(self):
+        return "<Pipeable: " + tuple(self.sequence).__repr__() + ">"
         
 class Positions(int, Enum):
     FRONT = 1
