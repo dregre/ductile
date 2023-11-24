@@ -49,7 +49,7 @@ def handle_fn_and_args(val, fn_and_args):
             return fn(*chain(args, [val]), **kwargs)
         case (_, _, _, _):
             raise NotImplementedError(
-                "Only piping to the front (push) or back (append)"
+                "Only piping to the front (prepend) or back (append)"
                 " of *args is currently supported.")
         case _:
             raise ValueError("Incorrect instruction format.")
