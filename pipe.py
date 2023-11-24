@@ -39,21 +39,16 @@ class PipeCallable(Pipe):
         self.kwargs = kwargs
         return self
     
+def F(fn, *args, **kwargs):
+    return ((1, fn, args, kwargs),)
+
+def B(fn, *args, **kwargs):
+    return ((-1, fn, args, kwargs),)
+    
 def handle_fns(val, fn_and_args):
-        fn = fn_and_args[0]
+        order, fn, args, kwargs = fn_and_args
+        newargs = chain([val], args) if order == 1 else chain(args, [val])
+        return fn(*newargs, **kwargs)
 
-        try:
-            args = fn_and_args[1]
-        except IndexError:
-            args = []
-
-        try:
-            kwargs = fn_and_args[2]
-        except IndexError:
-            kwargs = {}
-
-        return fn(*chain([val], args), **kwargs)
-
-def pipe(*args):
-    val, *fns = args
+def pipe(val, fns):
     return reduce(handle_fns, fns, val)
