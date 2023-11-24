@@ -14,13 +14,13 @@ class Pipeable:
         if isinstance(other, Pipeable):
             return Pipeable(chain(other, self))
         else:
-            return Pipeable.of_value(other) | self
+            return self.of_value(other) | self
         
     def __or__(self, other):
         if isinstance(other, Pipeable):
             return Pipeable(chain(self, other))
         else:
-            return self | Pipeable.of_value(other)
+            return self | self.of_value(other)
         
     def __iter__(self):
         return self.sequence.__iter__()
