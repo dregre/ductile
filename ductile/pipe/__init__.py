@@ -1,4 +1,4 @@
-from pipe.internal import (
+from ductile.pipe.internal import (
     B,
     F,
     P,
