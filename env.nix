@@ -14,6 +14,7 @@ in pkgs.mkShell rec {
     # the environment.
     pythonPackages.python
     pythonPackages.ipython
+    pythonPackages.pytest
 
     # This executes some shell code to initialize a venv in $venvDir before
     # dropping into the shell

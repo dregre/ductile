@@ -1,7 +1,7 @@
 from itertools import chain
 from functools import reduce
 from enum import Enum
-    
+
 class Pipeable:
     def __init__(self, sequence):
         self.sequence = sequence
@@ -14,13 +14,13 @@ class Pipeable:
         if isinstance(other, Pipeable):
             return Pipeable(chain(other, self))
         else:
-            return self.of_value(other) | self
+            raise ValueError('You can only pipe a Pipeable into a Pipeable')
         
     def __or__(self, other):
         if isinstance(other, Pipeable):
             return Pipeable(chain(self, other))
         else:
-            return self | self.of_value(other)
+            raise ValueError('You can only pipe a Pipeable into a Pipeable')
         
     def __iter__(self):
         return self.sequence.__iter__()
@@ -32,10 +32,14 @@ class Pipeable:
         return "<Pipeable: " + tuple(self.sequence).__repr__() + ">"
         
 class Positions(int, Enum):
+    VALUE = 0
     FIRST = 1
     LAST = 2
     PLACEHOLDER = 3
     HERE = 3
+
+def V(val):
+    return Pipeable.of_value((Positions.VALUE, val))
     
 def F(fn, *args, **kwargs):
     return Pipeable.of_value((Positions.FIRST, fn, args, kwargs))
@@ -74,5 +78,9 @@ def handle_fn_and_args(val, fn_and_args):
             raise ValueError("Incorrect instruction format.")
 
 def pipe(val_and_fns_and_args):
-    val, *fns_and_args = val_and_fns_and_args
-    return reduce(handle_fn_and_args, fns_and_args, val)
+    val_tup, *fns_and_args = val_and_fns_and_args
+    match val_tup:
+        case (Positions.VALUE, val):
+            return reduce(handle_fn_and_args, fns_and_args, val)
+        case _:
+            raise ValueError('First expression must be a value.')
