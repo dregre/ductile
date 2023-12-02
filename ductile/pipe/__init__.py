@@ -1,5 +1,5 @@
 from ductile.pipe.internal import (
-    B,
+    L,
     F,
     P,
     pipe,

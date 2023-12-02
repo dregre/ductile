@@ -32,16 +32,16 @@ class Pipeable:
         return "<Pipeable: " + tuple(self.sequence).__repr__() + ">"
         
 class Positions(int, Enum):
-    FRONT = 1
-    BACK = 2
+    FIRST = 1
+    LAST = 2
     PLACEHOLDER = 3
     HERE = 3
     
 def F(fn, *args, **kwargs):
-    return Pipeable.of_value((Positions.FRONT, fn, args, kwargs))
+    return Pipeable.of_value((Positions.FIRST, fn, args, kwargs))
 
-def B(fn, *args, **kwargs):
-    return Pipeable.of_value((Positions.BACK, fn, args, kwargs))
+def L(fn, *args, **kwargs):
+    return Pipeable.of_value((Positions.LAST, fn, args, kwargs))
 
 def P(fn, *args, **kwargs):
     return Pipeable.of_value((Positions.PLACEHOLDER, fn, args, kwargs))
@@ -57,9 +57,9 @@ def placeholder_in_args(args):
     
 def handle_fn_and_args(val, fn_and_args):
     match fn_and_args:
-        case (Positions.FRONT, fn, args, kwargs):
+        case (Positions.FIRST, fn, args, kwargs):
             return fn(*chain([val], args), **kwargs)
-        case (Positions.BACK, fn, args, kwargs):
+        case (Positions.LAST, fn, args, kwargs):
             return fn(*chain(args, [val]), **kwargs)
         case (Positions.PLACEHOLDER, fn, args, kwargs) if placeholder_in_args(args):
             return fn(*replace_val_in_args(val, args), **kwargs)
