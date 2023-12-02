@@ -4,7 +4,7 @@ from enum import Enum
 
 class Pipeable:
     def __init__(self, sequence):
-        self.sequence = sequence
+        self.sequence = tuple(sequence)
 
     @classmethod
     def of_value(cls, val):
