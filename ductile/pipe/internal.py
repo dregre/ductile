@@ -38,6 +38,8 @@ class Positions(int, Enum):
     PLACEHOLDER = 3
     HERE = 3
 
+HERE = Positions.HERE
+
 def V(val):
     return Pipeable.of_value((Positions.VALUE, val))
     
