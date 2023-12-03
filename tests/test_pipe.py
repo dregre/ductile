@@ -63,7 +63,7 @@ def test_pipe_P():
     assert pipe(V(VALUE)
                 | P(FN, 1, HERE, HERE, foo=HERE, bar=HERE)) == ((1, VALUE, VALUE), {'foo': VALUE, 'bar': VALUE})
 
-def test_pipe_multiple():
+def test_pipeline():
     assert pipe(
         V(VALUE)
         | F(FN, *ARGS)
