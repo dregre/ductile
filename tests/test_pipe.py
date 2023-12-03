@@ -67,3 +67,14 @@ def test_pipe_multiple():
         | L(FN, *ARGS, **KWARGS)
         | P(FN, 1, HERE, 2, **KWARGS)
     ) == ((1, ((*ARGS, ((VALUE, *ARGS), KWARGS)), KWARGS), 2), KWARGS)
+
+def test_wrong_instruction_exceptions_raised():
+    with pytest.raises(TypeError):
+        pipe()
+
+    with pytest.raises(ValueError):
+        pipe((1,))
+    
+    with pytest.raises(ValueError):
+        pipe(((Positions.VALUE, VALUE),
+              (Positions.FIRST, FN)))
