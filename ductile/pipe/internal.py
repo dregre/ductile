@@ -69,6 +69,8 @@ def handle_fn_and_args(val, fn_and_args):
             return fn(*chain(args, [val]), **kwargs)
         case (Positions.PLACEHOLDER, fn, args, kwargs) if placeholder_in_args(args) or placeholder_in_args(kwargs.values()):
             return fn(*replace_val_in_args(val, args), **replace_val_in_kwargs(val, kwargs))
+        case (Positions.VALUE, *_):
+            raise ValueError('Values only allowed as the first expression.')
         case (_, _, _, _):
             raise NotImplementedError(
                 "Only piping to the first (prepend), last (append) "

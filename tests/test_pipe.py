@@ -69,12 +69,21 @@ def test_pipe_multiple():
     ) == ((1, ((*ARGS, ((VALUE, *ARGS), KWARGS)), KWARGS), 2), KWARGS)
 
 def test_wrong_instruction_exceptions_raised():
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError, match=r'missing \d+ required positional argument'):
         pipe()
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match='First expression must be a value.'):
         pipe((1,))
     
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match='Incorrect instruction format.'):
         pipe(((Positions.VALUE, VALUE),
               (Positions.FIRST, FN)))
+
+    with pytest.raises(NotImplementedError):
+        pipe(((Positions.VALUE, VALUE),
+              (0.1, FN, ARGS, KWARGS)))
+
+    with pytest.raises(ValueError, match='Values only allowed as the first expression.'):
+        pipe(((Positions.VALUE, VALUE),
+              (Positions.FIRST, FN, ARGS, KWARGS),
+              (Positions.VALUE, VALUE)))
