@@ -67,8 +67,6 @@ def handle_fn_and_args(val, fn_and_args):
             return fn(*chain([val], args), **kwargs)
         case (Positions.LAST, fn, args, kwargs):
             return fn(*chain(args, [val]), **kwargs)
-        case (Positions.PLACEHOLDER, fn, args, kwargs) if placeholder_in_args(args):
-            return fn(*replace_val_in_args(val, args), **kwargs)
         case (Positions.PLACEHOLDER, fn, args, kwargs) if placeholder_in_args(args) or placeholder_in_args(kwargs.values()):
             return fn(*replace_val_in_args(val, args), **replace_val_in_kwargs(val, kwargs))
         case (_, _, _, _):
