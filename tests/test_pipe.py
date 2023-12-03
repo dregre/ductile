@@ -9,9 +9,9 @@ def test_pipeables_only_pipe_pipeables():
     assert tuple(Pipeable.of_value('foo') | Pipeable.of_value('bar')) == ('foo', 'bar')
 
     # somewhat weak, since we cannot test every case.
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match='You can only pipe a Pipeable into a Pipeable'):
         Pipeable.of_value('foo') | 'bar'
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match='You can only pipe a Pipeable into a Pipeable'):
         'bar' | Pipeable.of_value('foo')
 
 def test_piped_pipeables_chain_their_sequences():
