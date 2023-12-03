@@ -66,10 +66,10 @@ def test_pipe_P():
 def test_pipe_multiple():
     assert pipe(
         V(VALUE)
-        | F(FN, *ARGS, **KWARGS)
+        | F(FN, *ARGS)
         | L(FN, *ARGS, **KWARGS)
         | P(FN, 1, HERE, 2, **KWARGS)
-    ) == ((1, ((*ARGS, ((VALUE, *ARGS), KWARGS)), KWARGS), 2), KWARGS)
+    ) == ((1, ((*ARGS, ((VALUE, *ARGS), {})), KWARGS), 2), KWARGS)
 
 def test_wrong_instruction_exceptions_raised():
     with pytest.raises(TypeError, match=r'missing \d+ required positional argument'):
