@@ -22,8 +22,8 @@ def test_pipeable_of_value_wraps_value_in_a_tuple():
     assert pipeable.sequence == ('a',)
 
 VALUE = object()
-ARGS = ('1', '2')
-KWARGS = {'a': 1, 'b': 2}
+ARGS = (object(), object())
+KWARGS = {'a': object(), 'b': object()}
 FN = lambda *args, **kwargs: (args, kwargs)
 
 def test_V():
