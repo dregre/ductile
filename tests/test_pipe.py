@@ -51,6 +51,7 @@ def test_P():
     result_P = P(FN, *ARGS, **KWARGS)
     assert isinstance(result_P, Pipeable)
     assert tuple(result_P) == ((Positions.PLACEHOLDER, FN, ARGS, KWARGS),)
+    assert tuple(P(FN, *ARGS)) == ((Positions.PLACEHOLDER, FN, ARGS, {}),)
 
 def test_pipe_P():
     assert pipe(V(VALUE)
