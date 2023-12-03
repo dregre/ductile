@@ -35,6 +35,8 @@ def test_F():
     result_F = F(FN, *ARGS, **KWARGS)
     assert isinstance(result_F, Pipeable)
     assert tuple(result_F) == ((Positions.FIRST, FN, ARGS, KWARGS),)
+    assert tuple(F(FN, *ARGS)) == ((Positions.FIRST, FN, ARGS, {}),)
+    assert tuple(F(FN)) == ((Positions.FIRST, FN, (), {}),)
 
 def test_pipe_F():
     assert pipe(V(VALUE) | F(FN, *ARGS, **KWARGS)) == ((VALUE, *ARGS), KWARGS)
@@ -43,6 +45,8 @@ def test_L():
     result_L = L(FN, *ARGS, **KWARGS)
     assert isinstance(result_L, Pipeable)
     assert tuple(result_L) == ((Positions.LAST, FN, ARGS, KWARGS),)
+    assert tuple(L(FN, *ARGS)) == ((Positions.LAST, FN, ARGS, {}),)
+    assert tuple(L(FN)) == ((Positions.LAST, FN, (), {}),)
 
 def test_pipe_L():
     assert pipe(V(VALUE) | L(FN, *ARGS, **KWARGS)) == ((*ARGS, VALUE), KWARGS)
@@ -52,6 +56,7 @@ def test_P():
     assert isinstance(result_P, Pipeable)
     assert tuple(result_P) == ((Positions.PLACEHOLDER, FN, ARGS, KWARGS),)
     assert tuple(P(FN, *ARGS)) == ((Positions.PLACEHOLDER, FN, ARGS, {}),)
+    assert tuple(P(FN)) == ((Positions.PLACEHOLDER, FN, (), {}),)
 
 def test_pipe_P():
     assert pipe(V(VALUE)
